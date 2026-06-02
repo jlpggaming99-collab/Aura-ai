@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Aura AI · Gemini Intelligence</title>
+    <title>Aura AI · Gemini Chatbot</title>
     <!-- Google Fonts + Font Awesome 6 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -24,7 +24,6 @@
             padding: 1.2rem;
         }
 
-        /* main glass container */
         .aura-container {
             max-width: 1100px;
             width: 100%;
@@ -32,12 +31,10 @@
             backdrop-filter: blur(18px);
             border-radius: 2.5rem;
             border: 1px solid rgba(139, 92, 246, 0.35);
-            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.6);
             overflow: hidden;
-            transition: all 0.25s ease;
         }
 
-        /* header with aura identity */
         .aura-header {
             background: linear-gradient(135deg, rgba(20, 28, 50, 0.9), rgba(10, 15, 30, 0.95));
             padding: 1rem 1.8rem;
@@ -46,7 +43,6 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 1rem;
         }
 
         .brand {
@@ -63,13 +59,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
 
         .aura-icon i {
             font-size: 1.6rem;
             color: white;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .brand h1 {
@@ -79,7 +73,6 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
         }
 
         .brand span {
@@ -88,18 +81,6 @@
             padding: 0.2rem 0.7rem;
             border-radius: 40px;
             color: #c4b5fd;
-            font-weight: 500;
-            margin-left: 6px;
-        }
-
-        .key-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
-            backdrop-filter: blur(4px);
         }
 
         .led-status {
@@ -107,7 +88,6 @@
             align-items: center;
             gap: 8px;
             font-size: 0.8rem;
-            font-weight: 500;
         }
 
         .led {
@@ -115,7 +95,6 @@
             height: 10px;
             border-radius: 50%;
             background: #ef4444;
-            box-shadow: 0 0 4px #ef4444;
             transition: all 0.2s;
         }
 
@@ -129,8 +108,6 @@
             border: none;
             color: #a5b4fc;
             cursor: pointer;
-            font-size: 1rem;
-            transition: 0.2s;
             padding: 0.3rem 0.7rem;
             border-radius: 30px;
         }
@@ -140,19 +117,16 @@
             color: white;
         }
 
-        /* chat messages area */
         .chat-messages {
-            height: 480px;
+            height: 450px;
             overflow-y: auto;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
             background: rgba(5, 10, 22, 0.3);
-            scroll-behavior: smooth;
         }
 
-        /* custom scroll */
         .chat-messages::-webkit-scrollbar {
             width: 5px;
         }
@@ -165,12 +139,11 @@
             border-radius: 10px;
         }
 
-        /* message bubbles */
         .message {
             display: flex;
             flex-direction: column;
             max-width: 80%;
-            animation: floatUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: floatUp 0.3s ease;
         }
 
         .user-msg {
@@ -186,17 +159,13 @@
             border-radius: 1.8rem;
             line-height: 1.5;
             font-size: 0.95rem;
-            font-weight: 500;
             word-wrap: break-word;
-            white-space: pre-wrap;
-            backdrop-filter: blur(4px);
         }
 
         .user-msg .bubble {
             background: linear-gradient(145deg, #4f46e5, #6366f1);
             color: white;
             border-bottom-right-radius: 0.3rem;
-            box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
         }
 
         .ai-msg .bubble {
@@ -210,10 +179,8 @@
             font-size: 0.65rem;
             margin: 0.2rem 0.6rem;
             color: #7e8ba3;
-            letter-spacing: 0.3px;
         }
 
-        /* typing indicator aura style */
         .typing-indicator {
             display: flex;
             align-items: center;
@@ -222,15 +189,16 @@
             background: rgba(30, 41, 59, 0.6);
             border-radius: 2rem;
             width: fit-content;
-            backdrop-filter: blur(8px);
         }
+
         .typing-indicator span {
             width: 8px;
             height: 8px;
             background: #a78bfa;
             border-radius: 50%;
-            animation: wave 1.3s infinite ease-in-out;
+            animation: wave 1.3s infinite;
         }
+
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
@@ -240,82 +208,14 @@
         }
 
         @keyframes floatUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* input area */
         .input-panel {
             background: rgba(8, 12, 24, 0.8);
-            backdrop-filter: blur(8px);
             padding: 1.2rem 1.8rem 1.5rem;
             border-top: 1px solid rgba(139, 92, 246, 0.2);
-        }
-
-        .key-section {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 1.1rem;
-            flex-wrap: wrap;
-        }
-
-        .key-input-wrapper {
-            flex: 3;
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .key-input-wrapper i {
-            position: absolute;
-            left: 15px;
-            color: #8b5cf6;
-            font-size: 0.9rem;
-        }
-
-        .key-section input {
-            width: 100%;
-            background: #111827;
-            border: 1px solid #2d3a5e;
-            padding: 0.75rem 1rem 0.75rem 2.4rem;
-            border-radius: 60px;
-            color: #eef2ff;
-            font-size: 0.85rem;
-            outline: none;
-            transition: 0.2s;
-            font-family: monospace;
-        }
-
-        .key-section input:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 2px #8b5cf630;
-        }
-
-        .key-section button {
-            background: linear-gradient(95deg, #4f46e5, #7c3aed);
-            border: none;
-            padding: 0 1.4rem;
-            border-radius: 60px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .key-section button:hover {
-            transform: scale(0.96);
-            background: linear-gradient(95deg, #6366f1, #8b5cf6);
-            box-shadow: 0 4px 12px #4f46e570;
         }
 
         .composer {
@@ -336,7 +236,6 @@
             resize: none;
             outline: none;
             max-height: 120px;
-            transition: 0.2s;
         }
 
         .composer textarea:focus {
@@ -354,7 +253,10 @@
             border: none;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 6px 14px #4f46e580;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
         }
 
         .send-btn i {
@@ -364,10 +266,8 @@
 
         .send-btn:disabled {
             opacity: 0.5;
-            transform: none;
             cursor: not-allowed;
-            background: #475569;
-            box-shadow: none;
+            transform: none;
         }
 
         .info-footer {
@@ -377,7 +277,6 @@
             color: #5f6c8c;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
 
         .error-toast {
@@ -394,7 +293,7 @@
 </head>
 <body>
 
-<div class="aura-container" id="auraApp">
+<div class="aura-container">
     <div class="aura-header">
         <div class="brand">
             <div class="aura-icon">
@@ -402,121 +301,77 @@
             </div>
             <h1>AURA AI <span>by JLPG</span></h1>
         </div>
-        <div class="key-badge">
+        <div style="display: flex; gap: 15px; align-items: center;">
             <div class="led-status">
                 <div class="led" id="ledDot"></div>
-                <span id="keyStateText">🔑 No Key</span>
+                <span id="keyStateText">Ready</span>
             </div>
-            <button class="action-btn" id="clearHistoryBtn" title="reset conversation"><i class="fas fa-eraser"></i> Clear</button>
+            <button class="action-btn" id="clearHistoryBtn"><i class="fas fa-eraser"></i> Clear</button>
         </div>
     </div>
 
-    <div class="chat-messages" id="chatMessages">
-        <!-- dynamic messages -->
-    </div>
+    <div class="chat-messages" id="chatMessages"></div>
 
     <div class="input-panel">
         <div id="globalError" class="error-toast"></div>
-        <div class="key-section">
-            <div class="key-input-wrapper">
-                <i class="fas fa-key"></i>
-                <input type="password" id="apiKeyField" placeholder="Your Google Gemini API Key (get from aistudio.google.com)" autocomplete="off">
-            </div>
-            <button id="saveKeyBtn"><i class="fas fa-save"></i> Save & Connect</button>
-        </div>
         <div class="composer">
-            <textarea id="userMsgInput" rows="1" placeholder="Ask Aura AI anything ..." disabled></textarea>
-            <button class="send-btn" id="sendMsgBtn" disabled><i class="fas fa-paper-plane"></i></button>
+            <textarea id="userMsgInput" rows="1" placeholder="Ask Aura AI anything..."></textarea>
+            <button class="send-btn" id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
         </div>
         <div class="info-footer">
-            <span><i class="fas fa-brain"></i> Powered by Gemini 2.0 Flash (free)</span>
-            <span><i class="fas fa-lock"></i> Key stored locally · GitHub Pages ready</span>
+            <span><i class="fas fa-brain"></i> Powered by Google Gemini</span>
+            <span><i class="fas fa-shield-alt"></i> Free · Private</span>
         </div>
     </div>
 </div>
 
 <script>
-    // ---------- AURA AI: Jlpg Edition ----------
-    // using Google Gemini API (free tier)
-    const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
-    // DOM elements
+    // ============================================
+    // ✅ API KEY ADDED (Aapki di hui key)
+    // ============================================
+    let API_KEY = "AQ.Ab8RN6LVCT4BLx0alFVsvP_jm4gBP3_DPlGReK6tnf8sg1LOlw";
+    
+    // ============================================
+    
+    const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+    
     const messagesDiv = document.getElementById('chatMessages');
-    const apiKeyInput = document.getElementById('apiKeyField');
-    const saveKeyBtn = document.getElementById('saveKeyBtn');
     const userInput = document.getElementById('userMsgInput');
     const sendBtn = document.getElementById('sendMsgBtn');
-    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const clearBtn = document.getElementById('clearHistoryBtn');
     const ledDot = document.getElementById('ledDot');
     const keyStateSpan = document.getElementById('keyStateText');
     const errorToast = document.getElementById('globalError');
-
-    // State
-    let apiKey = "";
-    let conversationHistory = [];   // store { role: "user"/"model", content: string }
+    
+    let conversationHistory = [];
     let isLoading = false;
-
-    // ---------- Helper UI ----------
-    function showError(message, duration = 4500) {
-        errorToast.innerText = message;
+    
+    function showError(msg, duration = 4000) {
+        errorToast.innerText = msg;
         errorToast.style.display = "block";
         setTimeout(() => {
-            if (errorToast.innerText === message) errorToast.style.display = "none";
+            if (errorToast.innerText === msg) errorToast.style.display = "none";
         }, duration);
     }
-
+    
     function updateKeyUI() {
-        if (apiKey && apiKey.trim().startsWith("AIza") && apiKey.length > 20) {
+        if (API_KEY && API_KEY.length > 10) {
             ledDot.classList.add("active");
             keyStateSpan.innerHTML = '<i class="fas fa-check-circle"></i> Active';
             keyStateSpan.style.color = "#a7f3d0";
-            userInput.disabled = false;
             sendBtn.disabled = false;
-            userInput.placeholder = "✨ Message Aura AI ...";
+            userInput.disabled = false;
+            userInput.placeholder = "✨ Ask Aura AI ...";
         } else {
             ledDot.classList.remove("active");
-            keyStateSpan.innerHTML = '⚠️ No API Key';
+            keyStateSpan.innerHTML = '⚠️ No Key';
             keyStateSpan.style.color = "#fbcfe8";
-            userInput.disabled = true;
             sendBtn.disabled = true;
-            userInput.placeholder = "🔐 Set Gemini API key first (starts with AIza)";
-            if (apiKey && apiKey.length > 0 && !apiKey.startsWith("AIza")) {
-                showError("Invalid key format. Gemini keys start with 'AIza' from Google AI Studio.");
-            }
+            userInput.disabled = true;
+            userInput.placeholder = "🔐 API key missing!";
         }
     }
-
-    // load from localStorage
-    function loadAPIKey() {
-        const stored = localStorage.getItem("aura_gemini_key");
-        if (stored && stored.startsWith("AIza")) {
-            apiKey = stored;
-            apiKeyInput.value = stored;
-            updateKeyUI();
-        } else {
-            apiKey = "";
-            apiKeyInput.value = "";
-            updateKeyUI();
-        }
-    }
-
-    function saveAPIKey() {
-        let newKey = apiKeyInput.value.trim();
-        if (!newKey) {
-            showError("Please enter your Gemini API Key from Google AI Studio (aistudio.google.com)");
-            return;
-        }
-        if (!newKey.startsWith("AIza")) {
-            showError("❌ Wrong format: Gemini API keys start with 'AIza'. Get free key from Google AI Studio.");
-            return;
-        }
-        apiKey = newKey;
-        localStorage.setItem("aura_gemini_key", newKey);
-        updateKeyUI();
-        showError("✅ API key saved! Aura AI is ready.", 2500);
-    }
-
-    // chat storage
+    
     function loadConversation() {
         const saved = localStorage.getItem("aura_conversation");
         if (saved) {
@@ -527,20 +382,19 @@
                     renderMessages();
                     return;
                 }
-            } catch(e) { console.warn(e); }
+            } catch(e) {}
         }
-        // welcome message by Aura
         conversationHistory = [
-            { role: "model", content: "✨ Hello, I'm **Aura AI** — created by JLPG. I use Google's Gemini AI. Set your API key above and let's create something amazing together. Ask me anything!" }
+            { role: "model", content: "✨ Namaste! I'm **Aura AI** — created by JLPG. I'm powered by **Google Gemini AI**. Ask me anything — coding, writing, ideas, or just casual chat! 😊" }
         ];
         renderMessages();
-        persistConversation();
+        saveConversation();
     }
-
-    function persistConversation() {
+    
+    function saveConversation() {
         localStorage.setItem("aura_conversation", JSON.stringify(conversationHistory));
     }
-
+    
     function renderMessages() {
         messagesDiv.innerHTML = "";
         for (let msg of conversationHistory) {
@@ -553,14 +407,12 @@
             }
             const bubble = document.createElement("div");
             bubble.classList.add("bubble");
-            // simple markdown style for bold / new lines
-            let contentText = msg.content;
             if (msg.role === "model") {
-                contentText = contentText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-                contentText = contentText.replace(/\n/g, "<br>");
-                bubble.innerHTML = contentText;
+                let content = msg.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+                content = content.replace(/\n/g, "<br>");
+                bubble.innerHTML = content;
             } else {
-                bubble.textContent = contentText;
+                bubble.textContent = msg.content;
             }
             const timeSpan = document.createElement("div");
             timeSpan.classList.add("msg-time");
@@ -572,23 +424,22 @@
         }
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
-
+    
     function addMessage(role, content) {
         conversationHistory.push({ role, content });
         renderMessages();
-        persistConversation();
+        saveConversation();
     }
-
+    
     function clearChat() {
         conversationHistory = [
-            { role: "model", content: "🧹 Aura memory cleared. Ready to assist again! (API key still active). Ask away ✨" }
+            { role: "model", content: "🧹 Conversation cleared! Aura AI is ready for your next question. Ask away! ✨" }
         ];
         renderMessages();
-        persistConversation();
-        showError("Conversation reset.", 1800);
+        saveConversation();
+        showError("Chat history cleared!", 1500);
     }
-
-    // typing indicator
+    
     let typingElement = null;
     function showTyping() {
         if (typingElement) removeTyping();
@@ -597,33 +448,31 @@
         indicatorDiv.id = "typingIndicator";
         const bubbleWrap = document.createElement("div");
         bubbleWrap.classList.add("typing-indicator");
-        bubbleWrap.innerHTML = `<span></span><span></span><span></span><span style="margin-left:6px; font-size:0.7rem;">Aura is thinking...</span>`;
+        bubbleWrap.innerHTML = `<span></span><span></span><span></span><span style="margin-left:8px; font-size:0.7rem;">Aura is thinking...</span>`;
         indicatorDiv.appendChild(bubbleWrap);
         messagesDiv.appendChild(indicatorDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
         typingElement = indicatorDiv;
     }
-
+    
     function removeTyping() {
         if (typingElement) {
             typingElement.remove();
             typingElement = null;
         }
     }
-
-    // Gemini API call
+    
     async function sendToGemini(userMessage) {
-        if (!apiKey || !apiKey.startsWith("AIza")) {
-            showError("API key missing or invalid. Please save a valid Gemini key (AIza...)");
+        if (!API_KEY) {
+            showError("API key missing!");
             return null;
         }
-
-        // Build context: last 12 messages for good balance
-        const historyContext = conversationHistory.slice(-12).map(msg => ({
+        
+        const historyContext = conversationHistory.slice(-10).map(msg => ({
             role: msg.role === "user" ? "user" : "model",
             parts: [{ text: msg.content }]
         }));
-
+        
         const requestBody = {
             contents: [
                 ...historyContext,
@@ -635,102 +484,85 @@
                 topP: 0.95
             }
         };
-
+        
         try {
-            const response = await fetch(`${GEMINI_BASE_URL}?key=${apiKey}`, {
+            const response = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(requestBody)
             });
-
+            
             if (!response.ok) {
                 let errorDetail = "";
                 try {
                     const errData = await response.json();
                     errorDetail = errData.error?.message || JSON.stringify(errData);
                 } catch(e) { errorDetail = `HTTP ${response.status}`; }
-                throw new Error(`Gemini error (${response.status}): ${errorDetail}`);
+                throw new Error(`Gemini error: ${errorDetail}`);
             }
-
+            
             const data = await response.json();
             const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!aiText) throw new Error("Empty response from Gemini");
+            if (!aiText) throw new Error("Empty response");
             return aiText;
         } catch (err) {
             console.error(err);
-            let friendly = `❌ Aura couldn't reach Gemini: ${err.message}`;
-            if (err.message.includes("API key not valid") || err.message.includes("403")) {
-                friendly = "🔐 Invalid Gemini API key. Please check your key at Google AI Studio and enable billing (free tier works).";
+            let friendly = `❌ Error: ${err.message}`;
+            if (err.message.includes("API key") || err.message.includes("403")) {
+                friendly = "🔐 API key issue. Please check your key is valid.";
             } else if (err.message.includes("429")) {
-                friendly = "⏳ Rate limit exceeded. Gemini free tier has limits. Try again in a moment.";
+                friendly = "⏳ Rate limit exceeded. Please try again in a moment.";
             }
             return friendly;
         }
     }
-
-    // main send flow
+    
     async function handleSendMessage() {
         if (isLoading) return;
         const rawMsg = userInput.value.trim();
         if (!rawMsg) return;
-        if (!apiKey || !apiKey.startsWith("AIza")) {
-            showError("First save your Gemini API key (AIza...). Get free key from aistudio.google.com");
-            return;
-        }
-
-        // add user message to UI + history
+        
         addMessage("user", rawMsg);
         userInput.value = "";
         userInput.style.height = "auto";
-
+        
         isLoading = true;
         sendBtn.disabled = true;
         showTyping();
-
+        
         const aiReply = await sendToGemini(rawMsg);
-
+        
         removeTyping();
-
+        
         if (aiReply) {
             addMessage("model", aiReply);
         } else {
-            addMessage("model", "⚠️ Aura encountered a silence. Please check API key or network.");
+            addMessage("model", "⚠️ Aura couldn't respond. Please try again.");
         }
-
+        
         isLoading = false;
         sendBtn.disabled = false;
         userInput.focus();
     }
-
-    // auto-resize textarea
-    function autoResizeTextarea() {
+    
+    function autoResize() {
         userInput.style.height = "auto";
         userInput.style.height = Math.min(120, userInput.scrollHeight) + "px";
     }
-
-    // event listeners
-    saveKeyBtn.addEventListener("click", saveAPIKey);
+    
     sendBtn.addEventListener("click", handleSendMessage);
-    clearHistoryBtn.addEventListener("click", clearChat);
+    clearBtn.addEventListener("click", clearChat);
     userInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (!isLoading && sendBtn.disabled === false) handleSendMessage();
         }
     });
-    userInput.addEventListener("input", autoResizeTextarea);
-
-    // init app
-    loadAPIKey();
+    userInput.addEventListener("input", autoResize);
+    
+    updateKeyUI();
     loadConversation();
-    autoResizeTextarea();
-    // if key already saved & no conversation, ensure chat is ready
-    window.addEventListener("load", () => {
-        if (apiKey && conversationHistory.length > 0) {
-            userInput.disabled = false;
-            sendBtn.disabled = false;
-        }
-    });
+    autoResize();
 </script>
 </body>
 </html>
