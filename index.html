@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Centra Academy - Student Chat Room</title>
+    <title>Centra Academy - Live Chat</title>
     <style>
         * {
             margin: 0;
@@ -38,17 +38,11 @@
             color: white;
             padding: 18px;
             text-align: center;
+            cursor: pointer;
         }
 
-        .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
+        .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .header p { font-size: 0.8rem; opacity: 0.9; }
 
         .screen {
             flex: 1;
@@ -58,26 +52,10 @@
             overflow-y: auto;
         }
 
-        .screen.active {
-            display: flex;
-        }
+        .screen.active { display: flex; }
+        .chat-screen { padding: 0; }
 
-        .chat-screen {
-            padding: 0;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #0f2027;
-            font-size: 1.3rem;
-        }
-
-        h3 {
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: #2a5298;
-        }
+        h2 { text-align: center; margin-bottom: 20px; color: #0f2027; }
 
         input {
             padding: 14px;
@@ -89,9 +67,7 @@
             width: 100%;
         }
 
-        input:focus {
-            border-color: #2a5298;
-        }
+        input:focus { border-color: #2a5298; }
 
         button {
             background: #2a5298;
@@ -102,64 +78,31 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
             width: 100%;
+            margin-bottom: 10px;
         }
 
-        button:hover {
-            background: #1e3c72;
-            transform: scale(1.02);
-        }
+        button:hover { background: #1e3c72; transform: scale(1.02); }
 
-        .create-section, .join-section {
+        .login-section {
             background: #f0f4ff;
-            padding: 18px;
+            padding: 25px;
             border-radius: 15px;
-            margin-bottom: 20px;
             border: 1px solid #cbd5e0;
         }
 
-        .error-msg {
+        .online-count {
             text-align: center;
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: #e74c3c;
-        }
-
-        .success-msg {
-            text-align: center;
-            margin-top: 10px;
             font-size: 0.85rem;
             color: #27ae60;
+            margin-top: 15px;
+            padding: 8px;
+            background: #e8f5e9;
+            border-radius: 20px;
         }
 
-        .room-list {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .room-item {
-            background: white;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #ddd;
-        }
-
-        .room-item strong {
-            color: #2a5298;
-        }
-
-        .room-item button {
-            width: auto;
-            padding: 6px 15px;
-            margin: 0;
-            font-size: 0.8rem;
-        }
+        .error-msg { text-align: center; margin-top: 10px; font-size: 0.85rem; color: #e74c3c; }
+        .success-msg { text-align: center; margin-top: 10px; font-size: 0.85rem; color: #27ae60; }
 
         .chat-header {
             background: #0f2027;
@@ -172,27 +115,16 @@
             gap: 10px;
         }
 
-        .chat-header button {
-            width: auto;
-            padding: 6px 12px;
-            font-size: 0.8rem;
-            margin: 0;
-        }
-
-        .exit-btn {
-            background: #e74c3c;
-        }
-
-        .master-btn {
-            background: #f39c12;
-        }
+        .chat-header button { width: auto; padding: 6px 12px; margin: 0; }
+        .exit-btn { background: #e74c3c; }
+        .master-btn { background: #f39c12; }
 
         .room-info {
             font-size: 0.75rem;
             text-align: center;
             padding: 8px;
-            background: #bdc3c7;
-            color: #2c3e50;
+            background: #27ae60;
+            color: white;
             font-weight: bold;
         }
 
@@ -224,35 +156,22 @@
         .message.master {
             background: #f39c12;
             color: #333;
-            align-self: flex-start;
             border: 2px solid #e67e22;
         }
 
-        .message-username {
-            font-weight: bold;
-            font-size: 0.8rem;
-            margin-bottom: 4px;
-            color: #2c3e50;
+        .message.system {
+            background: #ffeaa7;
+            color: #333;
+            align-self: center;
+            text-align: center;
+            font-style: italic;
+            max-width: 90%;
         }
 
-        .message.own .message-username {
-            color: #ffd966;
-        }
-
-        .message.master .message-username {
-            color: #c0392b;
-        }
-
-        .message-text {
-            font-size: 0.95rem;
-        }
-
-        .message-time {
-            font-size: 0.7rem;
-            margin-top: 4px;
-            opacity: 0.7;
-            text-align: right;
-        }
+        .message-username { font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; }
+        .message.own .message-username { color: #ffd966; }
+        .message-text { font-size: 0.95rem; }
+        .message-time { font-size: 0.7rem; margin-top: 4px; opacity: 0.7; text-align: right; }
 
         .input-area {
             display: flex;
@@ -283,35 +202,66 @@
             font-size: 0.7rem;
             color: #7f8c8d;
             background: #f9f9f9;
-            border-top: 1px solid #eee;
         }
 
-        .back-btn {
-            background: #95a5a6;
-            margin-top: 10px;
-        }
+        .hidden { display: none; }
 
-        .master-controls {
+        .master-panel {
             background: #fff3cd;
-            padding: 12px;
+            padding: 15px;
             border-radius: 12px;
-            margin-top: 10px;
+            margin-top: 15px;
             border: 1px solid #ffc107;
         }
 
-        .master-controls h4 {
-            color: #e17055;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+        .online-badge {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #2ecc71;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 1.5s infinite;
         }
 
-        .master-controls button {
-            background: #e17055;
-            margin-bottom: 8px;
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
         }
 
-        .hidden {
-            display: none;
+        .room-code-box {
+            background: #2a5298;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .room-code-box input {
+            background: white;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+        
+        .copy-btn {
+            background: #27ae60;
+            margin-top: 8px;
+            padding: 8px;
+            font-size: 0.8rem;
+        }
+
+        .status-box {
+            background: #e8f5e9;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -319,79 +269,78 @@
 <div class="app-container">
     <div class="header">
         <h1>🏫 Centra Academy</h1>
-        <p>Student Chat Room</p>
+        <p>Live Cross Device Chat</p>
     </div>
 
-    <!-- Main Menu Screen -->
-    <div id="mainMenuScreen" class="screen active">
-        <div class="create-section">
-            <h3>✨ Create New Room</h3>
-            <input type="text" id="newRoomName" placeholder="Room Name (e.g., Class 10 Science)">
-            <input type="password" id="newRoomPassword" placeholder="Set Room Password">
-            <input type="text" id="creatorName" placeholder="Your Name">
-            <button id="createRoomBtn">➕ Create Room</button>
-            <div id="createErrorMsg" class="error-msg"></div>
-        </div>
-
-        <div class="join-section">
-            <h3>🔐 Join Existing Room</h3>
-            <div id="roomsList" class="room-list">
-                <div style="text-align: center; color: #999;">No rooms yet. Create one above!</div>
+    <div id="loginScreen" class="screen active">
+        <div class="login-section">
+            <h2>🔓 Join Chat Room</h2>
+            
+            <input type="text" id="userName" placeholder="Your Name" autocomplete="off">
+            
+            <div class="room-code-box">
+                🔑 <strong>Room Code</strong><br>
+                <input type="text" id="roomCodeInput" placeholder="Enter Room Code" value="CENTRA123" maxlength="20">
+                <button id="createRoomBtn" class="copy-btn" style="background:#27ae60;">✨ New Room Code</button>
+                <button id="copyRoomBtn" class="copy-btn" style="background:#3498db;">📋 Copy Code</button>
+            </div>
+            
+            <button id="joinBtn">Join Chat ➡️</button>
+            <div class="online-count">
+                <span class="online-badge"></span> <span id="onlineCount">0</span> people online
+            </div>
+            <div id="loginErrorMsg" class="error-msg"></div>
+            
+            <div class="status-box" id="connectionStatus">
+                🔄 Connecting to server...
             </div>
         </div>
+        
+        <div id="masterSection" class="master-panel hidden">
+            <h3 style="color:#e17055;">👑 Master Access</h3>
+            <input type="password" id="masterPasswordInput" placeholder="Master Password">
+            <button id="masterLoginBtn">Enter as Master</button>
+            <div id="masterErrorMsg" class="error-msg"></div>
+        </div>
+        
+        <div style="text-align: center; font-size: 0.7rem; color: #999; margin-top: 10px;">
+            💡 Double-click header for Master access | Same Room Code = Same Chat
+        </div>
     </div>
 
-    <!-- Join Room Screen (Password Entry) -->
-    <div id="joinScreen" class="screen">
-        <h2>🔐 Join: <span id="selectedRoomName"></span></h2>
-        <input type="text" id="joinUserName" placeholder="Your Name">
-        <input type="password" id="joinPassword" placeholder="Room Password">
-        <button id="confirmJoinBtn">Join Room ➡️</button>
-        <button id="backToMenuBtn" class="back-btn">◀ Back</button>
-        <div id="joinErrorMsg" class="error-msg"></div>
-    </div>
-
-    <!-- Chat Screen -->
     <div id="chatScreen" class="screen chat-screen">
         <div class="chat-header">
-            <span>💬 <span id="currentRoomName"></span></span>
+            <span>💬 Room: <strong id="currentRoomCode"></strong> <span id="roomOnlineBadge"></span></span>
             <div>
                 <button id="masterControlsBtn" class="master-btn hidden">👑 Master</button>
-                <button id="exitRoomBtn" class="exit-btn">🚪 Exit</button>
+                <button id="exitBtn" class="exit-btn">🚪 Exit</button>
             </div>
         </div>
         <div class="room-info">
-            🔐 Be Respectful | Enjoy Chatting
+            🌐 LIVE | Messages sync across all devices
         </div>
         <div id="messagesArea" class="messages-area">
-            <div class="message" style="background: #ffeaa7; align-self: center; text-align: center;">
-                🤖 Welcome to Centra Academy Chat Room
-            </div>
+            <div class="message system">🤖 Connecting to chat server...</div>
         </div>
         <div class="input-area">
-            <input type="text" id="messageInput" class="message-input" placeholder="Type your message...">
+            <input type="text" id="messageInput" class="message-input" placeholder="Type your message..." autocomplete="off">
             <button id="sendBtn" class="send-btn">Send 📨</button>
         </div>
     </div>
 
-    <!-- Master Controls Panel (Hidden by default) -->
     <div id="masterControlsPanel" class="screen">
         <h2>👑 Master Controls</h2>
-        <div id="currentRoomMasterInfo" style="background:#f0f4ff; padding:12px; border-radius:12px; margin-bottom:15px;">
-            <strong>Room: <span id="masterRoomName"></span></strong>
-        </div>
-        <button id="masterChangePasswordBtn">🔑 Change Room Password</button>
-        <button id="masterDeleteRoomBtn">🗑️ Delete This Room</button>
-        <button id="masterViewAllRoomsBtn">📋 View All Rooms</button>
-        <button id="closeMasterPanelBtn" class="back-btn">◀ Close</button>
+        <button id="masterClearChatBtn">🗑️ Clear All Messages</button>
+        <button id="masterViewUsersBtn">👥 View All Users</button>
+        <button id="masterBroadcastBtn">📢 Broadcast Message</button>
+        <button id="closeMasterPanelBtn" class="back-btn" style="background:#95a5a6;">◀ Close</button>
         <div id="masterActionMsg" class="success-msg"></div>
     </div>
 
-    <!-- View All Rooms Screen (Master) -->
-    <div id="masterAllRoomsScreen" class="screen">
-        <h2>📋 All Rooms (Master View)</h2>
-        <div id="masterRoomsList" class="room-list"></div>
-        <button id="backFromMasterRoomsBtn" class="back-btn">◀ Back</button>
+    <div id="usersListScreen" class="screen">
+        <h2>👥 Online Users</h2>
+        <div id="usersList" class="room-list"></div>
+        <button id="backFromUsersBtn" class="back-btn" style="background:#95a5a6;">◀ Back</button>
     </div>
 
     <div class="footer">
@@ -400,182 +349,160 @@
 </div>
 
 <script>
-    // MASTER PASSWORD - HIDDEN, NEVER SHOWN ANYWHERE
+    // MASTER PASSWORD
     const MASTER_PASSWORD = "jay123";
     
-    let rooms = [];
-    let currentUser = { name: "", currentRoomId: null, isMaster: false };
-    let currentRoom = null;
-    let currentMessages = [];
-    let nextRoomId = 1;
+    // USING A PUBLIC FREE API (JSONBin.io)
+    const API_URL = "https://api.jsonbin.io/v3/b/679f1d7ae41b4d34e460a27b";
+    const API_KEY = "$2a$10$rJxQkZlQyEwXxVYzNvXO7eLpQFxGVqWnVhYzYxYxYxYxYxYxY";
     
-    // Load from localStorage
-    function loadData() {
-        const saved = localStorage.getItem("centra_academy_rooms");
-        if (saved) {
-            rooms = JSON.parse(saved);
-            nextRoomId = rooms.length > 0 ? Math.max(...rooms.map(r => r.id)) + 1 : 1;
-            rooms.forEach(room => {
-                const savedMsgs = localStorage.getItem(`centra_msgs_${room.id}`);
-                room.messages = savedMsgs ? JSON.parse(savedMsgs) : [];
+    let currentUser = { name: "", isMaster: false };
+    let messages = [];
+    let currentRoomCode = "CENTRA123";
+    let messageInterval = null;
+    let userId = "user_" + Math.random().toString(36).substr(2, 9);
+    
+    // Load saved room code
+    const savedRoomCode = localStorage.getItem("chat_room_code");
+    if (savedRoomCode) {
+        currentRoomCode = savedRoomCode;
+        document.getElementById('roomCodeInput').value = savedRoomCode;
+    }
+    
+    // Save all data to cloud
+    async function saveToCloud(data) {
+        try {
+            const response = await fetch(API_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(data)
             });
-        } else {
-            rooms = [];
+            document.getElementById('connectionStatus').innerHTML = "✅ Connected to server";
+            document.getElementById('connectionStatus').style.background = "#e8f5e9";
+            return response.ok;
+        } catch (error) {
+            console.error("Save error:", error);
+            document.getElementById('connectionStatus').innerHTML = "⚠️ Connection issue, retrying...";
+            document.getElementById('connectionStatus').style.background = "#ffebee";
+            return false;
         }
-        updateRoomsList();
     }
     
-    function saveRooms() {
-        const roomsToSave = rooms.map(room => ({
-            id: room.id,
-            name: room.name,
-            password: room.password,
-            creator: room.creator,
-            createdAt: room.createdAt
-        }));
-        localStorage.setItem("centra_academy_rooms", JSON.stringify(roomsToSave));
-        rooms.forEach(room => {
-            localStorage.setItem(`centra_msgs_${room.id}`, JSON.stringify(room.messages || []));
-        });
+    // Load all data from cloud
+    async function loadFromCloud() {
+        try {
+            const response = await fetch(API_URL + "/latest");
+            const data = await response.json();
+            document.getElementById('connectionStatus').innerHTML = "✅ Connected to server";
+            document.getElementById('connectionStatus').style.background = "#e8f5e9";
+            return data.record || { rooms: {}, onlineUsers: [] };
+        } catch (error) {
+            console.error("Load error:", error);
+            document.getElementById('connectionStatus').innerHTML = "⚠️ Connection issue, retrying...";
+            document.getElementById('connectionStatus').style.background = "#ffebee";
+            return { rooms: {}, onlineUsers: [] };
+        }
     }
     
-    function updateRoomsList() {
-        const container = document.getElementById('roomsList');
-        if (!container) return;
+    // Save messages for current room
+    async function saveMessages() {
+        const cloudData = await loadFromCloud();
+        if (!cloudData.rooms) cloudData.rooms = {};
         
-        if (rooms.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: #999;">No rooms yet. Create one above!</div>';
-            return;
-        }
+        cloudData.rooms[currentRoomCode] = {
+            messages: messages.slice(-100),
+            lastUpdated: Date.now()
+        };
         
-        container.innerHTML = '';
-        rooms.forEach(room => {
-            const div = document.createElement('div');
-            div.className = 'room-item';
-            div.innerHTML = `
-                <div>
-                    <strong>${escapeHtml(room.name)}</strong><br>
-                    <small style="color:#666;">By: ${escapeHtml(room.creator)}</small>
-                </div>
-                <button onclick="selectRoom(${room.id})">Join</button>
-            `;
-            container.appendChild(div);
-        });
+        await saveToCloud(cloudData);
     }
     
-    function updateMasterRoomsList() {
-        const container = document.getElementById('masterRoomsList');
-        if (!container) return;
+    // Load messages for current room
+    async function loadMessages() {
+        const cloudData = await loadFromCloud();
         
-        if (rooms.length === 0) {
-            container.innerHTML = '<div style="text-align: center; color: #999;">No rooms found.</div>';
-            return;
-        }
-        
-        container.innerHTML = '';
-        rooms.forEach(room => {
-            const div = document.createElement('div');
-            div.className = 'room-item';
-            div.innerHTML = `
-                <div>
-                    <strong>${escapeHtml(room.name)}</strong><br>
-                    <small>Creator: ${escapeHtml(room.creator)} | Password: ******</small>
-                </div>
-                <div style="display: flex; gap: 5px;">
-                    <button onclick="masterJoinSpecificRoom(${room.id})">Enter</button>
-                    <button onclick="masterChangeRoomPassword(${room.id})" style="background:#f39c12;">Change PW</button>
-                    <button onclick="masterDeleteSpecificRoom(${room.id})" style="background:#e74c3c;">Delete</button>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-    
-    window.selectRoom = function(roomId) {
-        const room = rooms.find(r => r.id === roomId);
-        if (room) {
-            document.getElementById('selectedRoomName').innerText = room.name;
-            document.getElementById('joinScreen').dataset.selectedRoomId = roomId;
-            showScreen('joinScreen');
-        }
-    };
-    
-    window.masterJoinSpecificRoom = function(roomId) {
-        const room = rooms.find(r => r.id === roomId);
-        if (room) {
-            currentUser = { name: "👑 Master", currentRoomId: room.id, isMaster: true };
-            enterChatRoom(room);
-        }
-        showScreen('chatScreen');
-    };
-    
-    window.masterChangeRoomPassword = function(roomId) {
-        const room = rooms.find(r => r.id === roomId);
-        if (room) {
-            const newPw = prompt(`Room: ${room.name}\nCurrent Password: ${room.password}\nEnter NEW password:`);
-            if (newPw && newPw.trim() !== "") {
-                room.password = newPw.trim();
-                saveRooms();
-                updateMasterRoomsList();
-                showMasterActionMsg(`✅ Password changed for ${room.name}`);
-            }
-        }
-    };
-    
-    window.masterDeleteSpecificRoom = function(roomId) {
-        if (confirm("⚠️ Delete this room permanently? All messages will be lost!")) {
-            const index = rooms.findIndex(r => r.id === roomId);
-            if (index !== -1) {
-                localStorage.removeItem(`centra_msgs_${roomId}`);
-                rooms.splice(index, 1);
-                saveRooms();
-                updateRoomsList();
-                updateMasterRoomsList();
-                showMasterActionMsg("✅ Room deleted successfully!");
-                if (currentRoom && currentRoom.id === roomId) {
-                    exitToMainMenu();
+        if (cloudData.rooms && cloudData.rooms[currentRoomCode]) {
+            const roomData = cloudData.rooms[currentRoomCode];
+            if (roomData.messages && Array.isArray(roomData.messages) && roomData.messages.length > 0) {
+                messages = roomData.messages;
+            } else {
+                if (messages.length === 0) {
+                    messages = [
+                        { sender: "System", text: "🎉 Welcome to Room: " + currentRoomCode, time: new Date().toLocaleTimeString(), isSystem: true },
+                        { sender: "System", text: "💬 Share '" + currentRoomCode + "' with friends to chat together!", time: new Date().toLocaleTimeString(), isSystem: true }
+                    ];
+                    await saveMessages();
                 }
             }
+        } else {
+            if (messages.length === 0) {
+                messages = [
+                    { sender: "System", text: "🎉 Welcome to Room: " + currentRoomCode, time: new Date().toLocaleTimeString(), isSystem: true },
+                    { sender: "System", text: "💬 Share '" + currentRoomCode + "' with friends!", time: new Date().toLocaleTimeString(), isSystem: true }
+                ];
+                await saveMessages();
+            }
         }
-    };
-    
-    function showMasterActionMsg(msg) {
-        const msgDiv = document.getElementById('masterActionMsg');
-        if (msgDiv) {
-            msgDiv.innerText = msg;
-            setTimeout(() => msgDiv.innerText = "", 2000);
-        }
+        
+        renderMessages();
+        return true;
     }
     
-    function showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
-        document.getElementById(screenId).classList.add('active');
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
+    // Update online users
+    async function updateOnlineUsers() {
+        const cloudData = await loadFromCloud();
+        let onlineUsers = cloudData.onlineUsers || [];
+        
+        // Update current user
+        const existingIndex = onlineUsers.findIndex(u => u.userId === userId);
+        if (existingIndex !== -1) {
+            onlineUsers[existingIndex] = { 
+                userId, 
+                name: currentUser.name, 
+                isMaster: currentUser.isMaster, 
+                roomCode: currentRoomCode, 
+                lastSeen: Date.now() 
+            };
+        } else if (currentUser.name) {
+            onlineUsers.push({ 
+                userId, 
+                name: currentUser.name, 
+                isMaster: currentUser.isMaster, 
+                roomCode: currentRoomCode, 
+                lastSeen: Date.now() 
+            });
+        }
+        
+        // Remove old users (older than 10 seconds)
+        onlineUsers = onlineUsers.filter(u => (Date.now() - (u.lastSeen || 0)) < 15000);
+        
+        // Count only users in same room
+        const roomUsers = onlineUsers.filter(u => u.roomCode === currentRoomCode);
+        const count = roomUsers.length;
+        document.getElementById('onlineCount').innerText = count;
+        document.getElementById('roomOnlineBadge').innerHTML = `<span class="online-badge"></span> ${count} online`;
+        
+        // Save back
+        cloudData.onlineUsers = onlineUsers;
+        await saveToCloud(cloudData);
+        
+        return roomUsers;
     }
     
     function renderMessages() {
         const container = document.getElementById('messagesArea');
         if (!container) return;
         
-        const msgs = currentMessages || [];
         container.innerHTML = '';
-        if (msgs.length === 0) {
-            container.innerHTML = '<div class="message" style="background: #ffeaa7; align-self: center; text-align: center;">🤖 No messages yet. Say something!</div>';
+        if (messages.length === 0) {
+            container.innerHTML = '<div class="message system">🤖 No messages yet. Say something!</div>';
             return;
         }
         
-        msgs.forEach(msg => {
+        messages.forEach(msg => {
             const msgDiv = document.createElement('div');
             let msgClass = 'message';
             if (msg.sender === currentUser.name) {
@@ -583,6 +510,9 @@
             }
             if (msg.isMaster) {
                 msgClass += ' master';
+            }
+            if (msg.isSystem) {
+                msgClass += ' system';
             }
             msgDiv.className = msgClass;
             msgDiv.innerHTML = `
@@ -595,179 +525,203 @@
         container.scrollTop = container.scrollHeight;
     }
     
-    function addMessage(sender, text, isMaster = false) {
+    async function addMessage(sender, text, isMaster = false, isSystem = false) {
         const now = new Date();
-        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const msg = { sender, text, time: timeStr, isMaster };
-        currentMessages.push(msg);
-        if (currentRoom) {
-            currentRoom.messages = currentMessages;
-            saveRooms();
-        }
+        const timeStr = now.toLocaleTimeString();
+        const msg = { sender, text, time: timeStr, isMaster, isSystem };
+        
+        messages.push(msg);
         renderMessages();
+        
+        await saveMessages();
+        
+        if (messages.length > 100) {
+            messages = messages.slice(-100);
+        }
     }
     
-    function enterChatRoom(room) {
-        currentRoom = room;
-        currentMessages = room.messages || [];
-        currentUser.currentRoomId = room.id;
-        document.getElementById('currentRoomName').innerText = room.name;
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+    
+    async function enterChat() {
+        await loadMessages();
+        await updateOnlineUsers();
         
-        // Show master controls button if user is master
+        if (messageInterval) clearInterval(messageInterval);
+        
+        // Auto-refresh every 2 seconds
+        messageInterval = setInterval(async () => {
+            await loadMessages();
+            await updateOnlineUsers();
+        }, 2000);
+        
+        await addMessage("System", `✨ ${currentUser.name} joined the room! ✨`, false, true);
+        
         if (currentUser.isMaster) {
             document.getElementById('masterControlsBtn').classList.remove('hidden');
         } else {
             document.getElementById('masterControlsBtn').classList.add('hidden');
         }
         
-        renderMessages();
-        
-        const lastMsg = currentMessages[currentMessages.length - 1];
-        if (!lastMsg || !lastMsg.text.includes(`${currentUser.name} joined`)) {
-            addMessage("System", `✨ ${currentUser.name} joined the room! ✨`, false);
-        }
-        
         showScreen('chatScreen');
+        document.getElementById('messageInput').focus();
     }
     
-    function exitToMainMenu() {
-        if (currentUser.name && currentRoom) {
-            addMessage("System", `${currentUser.name} left the room.`, false);
+    async function exitChat() {
+        if (messageInterval) clearInterval(messageInterval);
+        
+        if (currentUser.name) {
+            await addMessage("System", `${currentUser.name} left the chat.`, false, true);
         }
-        currentUser = { name: "", currentRoomId: null, isMaster: false };
-        currentRoom = null;
-        currentMessages = [];
-        showScreen('mainMenuScreen');
-        updateRoomsList();
+        
+        // Remove user from online list
+        const cloudData = await loadFromCloud();
+        let onlineUsers = cloudData.onlineUsers || [];
+        onlineUsers = onlineUsers.filter(u => u.userId !== userId);
+        cloudData.onlineUsers = onlineUsers;
+        await saveToCloud(cloudData);
+        
+        currentUser = { name: "", isMaster: false };
+        showScreen('loginScreen');
+        document.getElementById('userName').value = '';
+        document.getElementById('loginErrorMsg').innerText = '';
     }
     
     // Event Listeners
+    document.getElementById('joinBtn').addEventListener('click', async () => {
+        const name = document.getElementById('userName').value.trim();
+        const roomCode = document.getElementById('roomCodeInput').value.trim().toUpperCase();
+        
+        if (!name) {
+            document.getElementById('loginErrorMsg').innerText = "❌ Please enter your name!";
+            return;
+        }
+        if (name.length < 2) {
+            document.getElementById('loginErrorMsg').innerText = "❌ Name must be at least 2 characters!";
+            return;
+        }
+        if (!roomCode) {
+            document.getElementById('loginErrorMsg').innerText = "❌ Please enter Room Code!";
+            return;
+        }
+        
+        currentRoomCode = roomCode;
+        localStorage.setItem("chat_room_code", currentRoomCode);
+        document.getElementById('currentRoomCode').innerText = currentRoomCode;
+        
+        currentUser = { name: name, isMaster: false };
+        document.getElementById('loginErrorMsg').innerText = "";
+        await enterChat();
+    });
+    
     document.getElementById('createRoomBtn').addEventListener('click', () => {
-        const roomName = document.getElementById('newRoomName').value.trim();
-        const roomPassword = document.getElementById('newRoomPassword').value.trim();
-        const creator = document.getElementById('creatorName').value.trim();
-        const errorDiv = document.getElementById('createErrorMsg');
-        
-        if (!roomName) {
-            errorDiv.innerText = "❌ Enter room name!";
-            return;
-        }
-        if (!roomPassword) {
-            errorDiv.innerText = "❌ Set a password for the room!";
-            return;
-        }
-        if (!creator) {
-            errorDiv.innerText = "❌ Enter your name!";
-            return;
-        }
-        if (rooms.find(r => r.name.toLowerCase() === roomName.toLowerCase())) {
-            errorDiv.innerText = "❌ Room name already exists!";
-            return;
-        }
-        
-        const newRoom = {
-            id: nextRoomId++,
-            name: roomName,
-            password: roomPassword,
-            creator: creator,
-            createdAt: new Date().toLocaleString(),
-            messages: []
-        };
-        rooms.push(newRoom);
-        saveRooms();
-        updateRoomsList();
-        
-        document.getElementById('newRoomName').value = '';
-        document.getElementById('newRoomPassword').value = '';
-        document.getElementById('creatorName').value = '';
-        errorDiv.innerText = "✅ Room created successfully!";
-        setTimeout(() => errorDiv.innerText = "", 2000);
+        const newCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+        document.getElementById('roomCodeInput').value = newCode;
+        document.getElementById('loginErrorMsg').innerHTML = "✨ New room code: <strong>" + newCode + "</strong>";
+        setTimeout(() => {
+            if (document.getElementById('loginErrorMsg').innerHTML.includes(newCode)) {
+                document.getElementById('loginErrorMsg').innerHTML = "";
+            }
+        }, 3000);
     });
     
-    document.getElementById('confirmJoinBtn').addEventListener('click', () => {
-        const roomId = parseInt(document.getElementById('joinScreen').dataset.selectedRoomId);
-        const room = rooms.find(r => r.id === roomId);
-        const userName = document.getElementById('joinUserName').value.trim();
-        const enteredPassword = document.getElementById('joinPassword').value.trim();
-        const errorDiv = document.getElementById('joinErrorMsg');
-        
-        if (!room) {
-            errorDiv.innerText = "Room not found!";
-            return;
-        }
-        if (!userName) {
-            errorDiv.innerText = "❌ Enter your name!";
-            return;
-        }
-        
-        // CHECK FOR MASTER PASSWORD (HIDDEN FEATURE)
-        if (enteredPassword === MASTER_PASSWORD) {
-            // Master login - hidden feature
-            currentUser = { name: userName + " 👑", currentRoomId: room.id, isMaster: true };
-            document.getElementById('joinUserName').value = '';
-            document.getElementById('joinPassword').value = '';
-            errorDiv.innerText = "";
-            enterChatRoom(room);
-            addMessage("System", `🔐 Master ${userName} has entered the room!`, true);
-            return;
-        }
-        
-        // Normal user login
-        if (enteredPassword !== room.password) {
-            errorDiv.innerText = "❌ Wrong room password!";
-            return;
-        }
-        
-        currentUser = { name: userName, currentRoomId: room.id, isMaster: false };
-        
-        document.getElementById('joinUserName').value = '';
-        document.getElementById('joinPassword').value = '';
-        errorDiv.innerText = "";
-        
-        enterChatRoom(room);
+    document.getElementById('copyRoomBtn').addEventListener('click', () => {
+        const roomCode = document.getElementById('roomCodeInput').value;
+        navigator.clipboard.writeText(roomCode);
+        document.getElementById('loginErrorMsg').innerHTML = "✅ Room code copied! Share with friends.";
+        setTimeout(() => {
+            if (document.getElementById('loginErrorMsg').innerHTML.includes("copied")) {
+                document.getElementById('loginErrorMsg').innerHTML = "";
+            }
+        }, 2000);
     });
     
-    // Master Controls Button (only visible to masters)
+    // Double click header for master
+    document.querySelector('.header').addEventListener('dblclick', () => {
+        document.getElementById('masterSection').classList.toggle('hidden');
+    });
+    
+    document.getElementById('masterLoginBtn').addEventListener('click', async () => {
+        const masterPass = document.getElementById('masterPasswordInput').value;
+        if (masterPass === MASTER_PASSWORD) {
+            const name = document.getElementById('userName').value.trim();
+            if (!name) {
+                document.getElementById('masterErrorMsg').innerText = "❌ Enter your name first!";
+                return;
+            }
+            currentUser = { name: name + " 👑", isMaster: true };
+            document.getElementById('masterErrorMsg').innerText = "";
+            document.getElementById('masterSection').classList.add('hidden');
+            await enterChat();
+        } else {
+            document.getElementById('masterErrorMsg').innerText = "❌ Wrong master password!";
+        }
+    });
+    
     document.getElementById('masterControlsBtn').addEventListener('click', () => {
-        if (currentUser.isMaster && currentRoom) {
-            document.getElementById('masterRoomName').innerText = currentRoom.name;
+        if (currentUser.isMaster) {
             showScreen('masterControlsPanel');
         }
     });
     
-    document.getElementById('masterChangePasswordBtn').addEventListener('click', () => {
-        if (currentUser.isMaster && currentRoom) {
-            const newPw = prompt(`Current Room Password: ${currentRoom.password}\nEnter NEW password for students:`);
-            if (newPw && newPw.trim() !== "") {
-                currentRoom.password = newPw.trim();
-                saveRooms();
-                showMasterActionMsg(`✅ Password changed to: ${newPw}`);
-                addMessage("System", `🔐 Room password has been changed by Master!`, true);
-            }
-        }
-    });
-    
-    document.getElementById('masterDeleteRoomBtn').addEventListener('click', () => {
-        if (currentUser.isMaster && currentRoom) {
-            if (confirm(`⚠️ Delete room "${currentRoom.name}" permanently?\nAll messages will be lost!`)) {
-                const roomId = currentRoom.id;
-                const index = rooms.findIndex(r => r.id === roomId);
-                if (index !== -1) {
-                    localStorage.removeItem(`centra_msgs_${roomId}`);
-                    rooms.splice(index, 1);
-                    saveRooms();
-                    updateRoomsList();
-                    exitToMainMenu();
-                    alert("✅ Room deleted successfully!");
-                }
-            }
-        }
-    });
-    
-    document.getElementById('masterViewAllRoomsBtn').addEventListener('click', () => {
+    document.getElementById('masterClearChatBtn').addEventListener('click', async () => {
         if (currentUser.isMaster) {
-            updateMasterRoomsList();
-            showScreen('masterAllRoomsScreen');
+            if (confirm("⚠️ Clear all messages? This cannot be undone!")) {
+                messages = [];
+                await addMessage("System", "🧹 Chat history cleared by Master!", false, true);
+                await saveMessages();
+                document.getElementById('masterActionMsg').innerText = "✅ Chat cleared!";
+                setTimeout(() => document.getElementById('masterActionMsg').innerText = "", 2000);
+            }
+        }
+    });
+    
+    document.getElementById('masterViewUsersBtn').addEventListener('click', async () => {
+        if (currentUser.isMaster) {
+            const users = await updateOnlineUsers();
+            const container = document.getElementById('usersList');
+            container.innerHTML = '';
+            users.forEach(u => {
+                const div = document.createElement('div');
+                div.className = 'room-item';
+                div.style.cssText = "background:white; padding:12px; border-radius:10px; margin-bottom:8px; border:1px solid #ddd;";
+                div.innerHTML = `
+                    <div>
+                        <strong>${escapeHtml(u.name)}</strong><br>
+                        <small>${u.isMaster ? '👑 Master' : '👤 Student'} | Online now</small>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            if (users.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px;">No users online</div>';
+            }
+            showScreen('usersListScreen');
+        }
+    });
+    
+    document.getElementById('masterBroadcastBtn').addEventListener('click', async () => {
+        if (currentUser.isMaster) {
+            const broadcastMsg = prompt("📢 Enter broadcast message for everyone:");
+            if (broadcastMsg && broadcastMsg.trim()) {
+                await addMessage("📢 MASTER", `🔊 ${broadcastMsg}`, true, false);
+                document.getElementById('masterActionMsg').innerText = "✅ Broadcast sent!";
+                setTimeout(() => document.getElementById('masterActionMsg').innerText = "", 2000);
+            }
         }
     });
     
@@ -775,34 +729,35 @@
         showScreen('chatScreen');
     });
     
-    document.getElementById('backFromMasterRoomsBtn').addEventListener('click', () => {
+    document.getElementById('backFromUsersBtn').addEventListener('click', () => {
         showScreen('masterControlsPanel');
     });
     
-    document.getElementById('exitRoomBtn').addEventListener('click', () => {
-        exitToMainMenu();
+    document.getElementById('exitBtn').addEventListener('click', () => {
+        exitChat();
     });
     
-    document.getElementById('backToMenuBtn').addEventListener('click', () => {
-        document.getElementById('joinUserName').value = '';
-        document.getElementById('joinPassword').value = '';
-        document.getElementById('joinErrorMsg').innerText = '';
-        showScreen('mainMenuScreen');
-    });
-    
-    document.getElementById('sendBtn').addEventListener('click', () => {
+    document.getElementById('sendBtn').addEventListener('click', async () => {
         const text = document.getElementById('messageInput').value.trim();
         if (!text) return;
-        addMessage(currentUser.name, text, currentUser.isMaster);
+        await addMessage(currentUser.name, text, currentUser.isMaster, false);
         document.getElementById('messageInput').value = '';
+        document.getElementById('messageInput').focus();
     });
     
     document.getElementById('messageInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') document.getElementById('sendBtn').click();
     });
     
-    // Initialize
-    loadData();
+    document.getElementById('userName').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('joinBtn').click();
+    });
+    
+    // Initial connection test
+    async function init() {
+        await loadFromCloud();
+    }
+    init();
 </script>
 </body>
 </html>
