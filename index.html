@@ -2,567 +2,807 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Aura AI · Gemini Chatbot</title>
-    <!-- Google Fonts + Font Awesome 6 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Centra Academy - Student Chat Room</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: radial-gradient(ellipse at 30% 10%, #0a0f1e, #03050b);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 1.2rem;
+            align-items: center;
+            padding: 20px;
         }
 
-        .aura-container {
-            max-width: 1100px;
+        .app-container {
             width: 100%;
-            background: rgba(15, 22, 36, 0.6);
-            backdrop-filter: blur(18px);
-            border-radius: 2.5rem;
-            border: 1px solid rgba(139, 92, 246, 0.35);
-            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.6);
+            max-width: 550px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-        }
-
-        .aura-header {
-            background: linear-gradient(135deg, rgba(20, 28, 50, 0.9), rgba(10, 15, 30, 0.95));
-            padding: 1rem 1.8rem;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.4);
             display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            height: 90vh;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .aura-icon {
-            background: linear-gradient(145deg, #8b5cf6, #6366f1);
-            width: 42px;
-            height: 42px;
-            border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .aura-icon i {
-            font-size: 1.6rem;
+        .header {
+            background: #0f2027;
             color: white;
+            padding: 18px;
+            text-align: center;
         }
 
-        .brand h1 {
-            font-size: 1.7rem;
-            font-weight: 700;
-            background: linear-gradient(130deg, #e0e7ff, #c4b5fd, #a78bfa);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
         }
 
-        .brand span {
-            font-size: 0.75rem;
-            background: rgba(139, 92, 246, 0.2);
-            padding: 0.2rem 0.7rem;
-            border-radius: 40px;
-            color: #c4b5fd;
+        .header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
         }
 
-        .led-status {
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .screen.active {
             display: flex;
+        }
+
+        .chat-screen {
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0f2027;
+            font-size: 1.3rem;
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #2a5298;
+        }
+
+        input {
+            padding: 14px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            outline: none;
+            width: 100%;
+        }
+
+        input:focus {
+            border-color: #2a5298;
+        }
+
+        button {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #1e3c72;
+            transform: scale(1.02);
+        }
+
+        .create-section, .join-section {
+            background: #f0f4ff;
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e0;
+        }
+
+        .error-msg {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #e74c3c;
+        }
+
+        .success-msg {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #27ae60;
+        }
+
+        .room-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .room-item {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .room-item strong {
+            color: #2a5298;
+        }
+
+        .room-item button {
+            width: auto;
+            padding: 6px 15px;
+            margin: 0;
             font-size: 0.8rem;
         }
 
-        .led {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #ef4444;
-            transition: all 0.2s;
-        }
-
-        .led.active {
-            background: #10b981;
-            box-shadow: 0 0 10px #10b981;
-        }
-
-        .action-btn {
-            background: transparent;
-            border: none;
-            color: #a5b4fc;
-            cursor: pointer;
-            padding: 0.3rem 0.7rem;
-            border-radius: 30px;
-        }
-
-        .action-btn:hover {
-            background: #2d3a5e50;
+        .chat-header {
+            background: #0f2027;
             color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .chat-messages {
-            height: 450px;
+        .chat-header button {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .exit-btn {
+            background: #e74c3c;
+        }
+
+        .master-btn {
+            background: #f39c12;
+        }
+
+        .room-info {
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 8px;
+            background: #bdc3c7;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .messages-area {
+            flex: 1;
             overflow-y: auto;
-            padding: 1.5rem;
+            padding: 15px;
+            background: #ecf0f1;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            background: rgba(5, 10, 22, 0.3);
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 5px;
-        }
-        .chat-messages::-webkit-scrollbar-track {
-            background: #1e293b;
-            border-radius: 10px;
-        }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #8b5cf6;
-            border-radius: 10px;
+            gap: 10px;
         }
 
         .message {
-            display: flex;
-            flex-direction: column;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 18px;
             max-width: 80%;
-            animation: floatUp 0.3s ease;
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .user-msg {
+        .message.own {
+            background: #2a5298;
+            color: white;
             align-self: flex-end;
         }
 
-        .ai-msg {
+        .message.master {
+            background: #f39c12;
+            color: #333;
             align-self: flex-start;
+            border: 2px solid #e67e22;
         }
 
-        .bubble {
-            padding: 0.9rem 1.3rem;
-            border-radius: 1.8rem;
-            line-height: 1.5;
+        .message-username {
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+
+        .message.own .message-username {
+            color: #ffd966;
+        }
+
+        .message.master .message-username {
+            color: #c0392b;
+        }
+
+        .message-text {
             font-size: 0.95rem;
-            word-wrap: break-word;
         }
 
-        .user-msg .bubble {
-            background: linear-gradient(145deg, #4f46e5, #6366f1);
-            color: white;
-            border-bottom-right-radius: 0.3rem;
+        .message-time {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            opacity: 0.7;
+            text-align: right;
         }
 
-        .ai-msg .bubble {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            color: #f1f5f9;
-            border-bottom-left-radius: 0.3rem;
-        }
-
-        .msg-time {
-            font-size: 0.65rem;
-            margin: 0.2rem 0.6rem;
-            color: #7e8ba3;
-        }
-
-        .typing-indicator {
+        .input-area {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0.6rem 1.2rem;
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 2rem;
-            width: fit-content;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #ddd;
+            gap: 10px;
         }
 
-        .typing-indicator span {
-            width: 8px;
-            height: 8px;
-            background: #a78bfa;
-            border-radius: 50%;
-            animation: wave 1.3s infinite;
-        }
-
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes wave {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-            30% { transform: translateY(-6px); opacity: 1; }
-        }
-
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-panel {
-            background: rgba(8, 12, 24, 0.8);
-            padding: 1.2rem 1.8rem 1.5rem;
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-        }
-
-        .composer {
-            display: flex;
-            gap: 0.8rem;
-            align-items: flex-end;
-        }
-
-        .composer textarea {
+        .message-input {
             flex: 1;
-            background: #111827;
-            border: 1px solid #2d3a5e;
-            border-radius: 2rem;
-            padding: 0.85rem 1.3rem;
-            font-family: 'Inter', monospace;
-            font-size: 0.9rem;
-            color: #f1f5f9;
-            resize: none;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
             outline: none;
-            max-height: 120px;
-        }
-
-        .composer textarea:focus {
-            border-color: #a78bfa;
+            margin: 0;
         }
 
         .send-btn {
-            background: radial-gradient(circle at 30% 10%, #8b5cf6, #4f46e5);
-            width: 52px;
-            height: 52px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-            transition: 0.2s;
+            width: auto;
+            padding: 10px 20px;
+            margin: 0;
         }
 
-        .send-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .send-btn i {
-            font-size: 1.4rem;
-            color: white;
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .info-footer {
+        .footer {
             text-align: center;
+            padding: 8px;
             font-size: 0.7rem;
-            margin-top: 0.7rem;
-            color: #5f6c8c;
-            display: flex;
-            justify-content: space-between;
+            color: #7f8c8d;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
         }
 
-        .error-toast {
-            background: #7f1a1aee;
-            border-left: 4px solid #f97316;
-            padding: 0.5rem 1rem;
-            border-radius: 14px;
-            font-size: 0.75rem;
-            margin-bottom: 0.8rem;
-            color: #ffe4e2;
+        .back-btn {
+            background: #95a5a6;
+            margin-top: 10px;
+        }
+
+        .master-controls {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            border: 1px solid #ffc107;
+        }
+
+        .master-controls h4 {
+            color: #e17055;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .master-controls button {
+            background: #e17055;
+            margin-bottom: 8px;
+        }
+
+        .hidden {
             display: none;
         }
     </style>
 </head>
 <body>
+<div class="app-container">
+    <div class="header">
+        <h1>🏫 Centra Academy</h1>
+        <p>Student Chat Room</p>
+    </div>
 
-<div class="aura-container">
-    <div class="aura-header">
-        <div class="brand">
-            <div class="aura-icon">
-                <i class="fas fa-gem"></i>
-            </div>
-            <h1>AURA AI <span>by JLPG</span></h1>
+    <!-- Main Menu Screen -->
+    <div id="mainMenuScreen" class="screen active">
+        <div class="create-section">
+            <h3>✨ Create New Room</h3>
+            <input type="text" id="newRoomName" placeholder="Room Name (e.g., Class 10 Science)">
+            <input type="password" id="newRoomPassword" placeholder="Set Room Password">
+            <input type="text" id="creatorName" placeholder="Your Name">
+            <button id="createRoomBtn">➕ Create Room</button>
+            <div id="createErrorMsg" class="error-msg"></div>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <div class="led-status">
-                <div class="led" id="ledDot"></div>
-                <span id="keyStateText">Ready</span>
+
+        <div class="join-section">
+            <h3>🔐 Join Existing Room</h3>
+            <div id="roomsList" class="room-list">
+                <div style="text-align: center; color: #999;">No rooms yet. Create one above!</div>
             </div>
-            <button class="action-btn" id="clearHistoryBtn"><i class="fas fa-eraser"></i> Clear</button>
         </div>
     </div>
 
-    <div class="chat-messages" id="chatMessages"></div>
+    <!-- Join Room Screen (Password Entry) -->
+    <div id="joinScreen" class="screen">
+        <h2>🔐 Join: <span id="selectedRoomName"></span></h2>
+        <input type="text" id="joinUserName" placeholder="Your Name">
+        <input type="password" id="joinPassword" placeholder="Room Password">
+        <button id="confirmJoinBtn">Join Room ➡️</button>
+        <button id="backToMenuBtn" class="back-btn">◀ Back</button>
+        <div id="joinErrorMsg" class="error-msg"></div>
+    </div>
 
-    <div class="input-panel">
-        <div id="globalError" class="error-toast"></div>
-        <div class="composer">
-            <textarea id="userMsgInput" rows="1" placeholder="Ask Aura AI anything..."></textarea>
-            <button class="send-btn" id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
+    <!-- Chat Screen -->
+    <div id="chatScreen" class="screen chat-screen">
+        <div class="chat-header">
+            <span>💬 <span id="currentRoomName"></span></span>
+            <div>
+                <button id="masterControlsBtn" class="master-btn hidden">👑 Master</button>
+                <button id="exitRoomBtn" class="exit-btn">🚪 Exit</button>
+            </div>
         </div>
-        <div class="info-footer">
-            <span><i class="fas fa-brain"></i> Powered by Google Gemini</span>
-            <span><i class="fas fa-shield-alt"></i> Free · Private</span>
+        <div class="room-info">
+            🔐 Be Respectful | Enjoy Chatting
         </div>
+        <div id="messagesArea" class="messages-area">
+            <div class="message" style="background: #ffeaa7; align-self: center; text-align: center;">
+                🤖 Welcome to Centra Academy Chat Room
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="messageInput" class="message-input" placeholder="Type your message...">
+            <button id="sendBtn" class="send-btn">Send 📨</button>
+        </div>
+    </div>
+
+    <!-- Master Controls Panel (Hidden by default) -->
+    <div id="masterControlsPanel" class="screen">
+        <h2>👑 Master Controls</h2>
+        <div id="currentRoomMasterInfo" style="background:#f0f4ff; padding:12px; border-radius:12px; margin-bottom:15px;">
+            <strong>Room: <span id="masterRoomName"></span></strong>
+        </div>
+        <button id="masterChangePasswordBtn">🔑 Change Room Password</button>
+        <button id="masterDeleteRoomBtn">🗑️ Delete This Room</button>
+        <button id="masterViewAllRoomsBtn">📋 View All Rooms</button>
+        <button id="closeMasterPanelBtn" class="back-btn">◀ Close</button>
+        <div id="masterActionMsg" class="success-msg"></div>
+    </div>
+
+    <!-- View All Rooms Screen (Master) -->
+    <div id="masterAllRoomsScreen" class="screen">
+        <h2>📋 All Rooms (Master View)</h2>
+        <div id="masterRoomsList" class="room-list"></div>
+        <button id="backFromMasterRoomsBtn" class="back-btn">◀ Back</button>
+    </div>
+
+    <div class="footer">
+        Made by JLPG
     </div>
 </div>
 
 <script>
-    // ============================================
-    // ✅ API KEY ADDED (Aapki di hui key)
-    // ============================================
-    let API_KEY = "AQ.Ab8RN6LVCT4BLx0alFVsvP_jm4gBP3_DPlGReK6tnf8sg1LOlw";
+    // MASTER PASSWORD - HIDDEN, NEVER SHOWN ANYWHERE
+    const MASTER_PASSWORD = "jay123";
     
-    // ============================================
+    let rooms = [];
+    let currentUser = { name: "", currentRoomId: null, isMaster: false };
+    let currentRoom = null;
+    let currentMessages = [];
+    let nextRoomId = 1;
     
-    const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-    
-    const messagesDiv = document.getElementById('chatMessages');
-    const userInput = document.getElementById('userMsgInput');
-    const sendBtn = document.getElementById('sendMsgBtn');
-    const clearBtn = document.getElementById('clearHistoryBtn');
-    const ledDot = document.getElementById('ledDot');
-    const keyStateSpan = document.getElementById('keyStateText');
-    const errorToast = document.getElementById('globalError');
-    
-    let conversationHistory = [];
-    let isLoading = false;
-    
-    function showError(msg, duration = 4000) {
-        errorToast.innerText = msg;
-        errorToast.style.display = "block";
-        setTimeout(() => {
-            if (errorToast.innerText === msg) errorToast.style.display = "none";
-        }, duration);
-    }
-    
-    function updateKeyUI() {
-        if (API_KEY && API_KEY.length > 10) {
-            ledDot.classList.add("active");
-            keyStateSpan.innerHTML = '<i class="fas fa-check-circle"></i> Active';
-            keyStateSpan.style.color = "#a7f3d0";
-            sendBtn.disabled = false;
-            userInput.disabled = false;
-            userInput.placeholder = "✨ Ask Aura AI ...";
-        } else {
-            ledDot.classList.remove("active");
-            keyStateSpan.innerHTML = '⚠️ No Key';
-            keyStateSpan.style.color = "#fbcfe8";
-            sendBtn.disabled = true;
-            userInput.disabled = true;
-            userInput.placeholder = "🔐 API key missing!";
-        }
-    }
-    
-    function loadConversation() {
-        const saved = localStorage.getItem("aura_conversation");
+    // Load from localStorage
+    function loadData() {
+        const saved = localStorage.getItem("centra_academy_rooms");
         if (saved) {
-            try {
-                let parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    conversationHistory = parsed;
-                    renderMessages();
-                    return;
-                }
-            } catch(e) {}
+            rooms = JSON.parse(saved);
+            nextRoomId = rooms.length > 0 ? Math.max(...rooms.map(r => r.id)) + 1 : 1;
+            rooms.forEach(room => {
+                const savedMsgs = localStorage.getItem(`centra_msgs_${room.id}`);
+                room.messages = savedMsgs ? JSON.parse(savedMsgs) : [];
+            });
+        } else {
+            rooms = [];
         }
-        conversationHistory = [
-            { role: "model", content: "✨ Namaste! I'm **Aura AI** — created by JLPG. I'm powered by **Google Gemini AI**. Ask me anything — coding, writing, ideas, or just casual chat! 😊" }
-        ];
-        renderMessages();
-        saveConversation();
+        updateRoomsList();
     }
     
-    function saveConversation() {
-        localStorage.setItem("aura_conversation", JSON.stringify(conversationHistory));
+    function saveRooms() {
+        const roomsToSave = rooms.map(room => ({
+            id: room.id,
+            name: room.name,
+            password: room.password,
+            creator: room.creator,
+            createdAt: room.createdAt
+        }));
+        localStorage.setItem("centra_academy_rooms", JSON.stringify(roomsToSave));
+        rooms.forEach(room => {
+            localStorage.setItem(`centra_msgs_${room.id}`, JSON.stringify(room.messages || []));
+        });
+    }
+    
+    function updateRoomsList() {
+        const container = document.getElementById('roomsList');
+        if (!container) return;
+        
+        if (rooms.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: #999;">No rooms yet. Create one above!</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        rooms.forEach(room => {
+            const div = document.createElement('div');
+            div.className = 'room-item';
+            div.innerHTML = `
+                <div>
+                    <strong>${escapeHtml(room.name)}</strong><br>
+                    <small style="color:#666;">By: ${escapeHtml(room.creator)}</small>
+                </div>
+                <button onclick="selectRoom(${room.id})">Join</button>
+            `;
+            container.appendChild(div);
+        });
+    }
+    
+    function updateMasterRoomsList() {
+        const container = document.getElementById('masterRoomsList');
+        if (!container) return;
+        
+        if (rooms.length === 0) {
+            container.innerHTML = '<div style="text-align: center; color: #999;">No rooms found.</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        rooms.forEach(room => {
+            const div = document.createElement('div');
+            div.className = 'room-item';
+            div.innerHTML = `
+                <div>
+                    <strong>${escapeHtml(room.name)}</strong><br>
+                    <small>Creator: ${escapeHtml(room.creator)} | Password: ******</small>
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <button onclick="masterJoinSpecificRoom(${room.id})">Enter</button>
+                    <button onclick="masterChangeRoomPassword(${room.id})" style="background:#f39c12;">Change PW</button>
+                    <button onclick="masterDeleteSpecificRoom(${room.id})" style="background:#e74c3c;">Delete</button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+    
+    window.selectRoom = function(roomId) {
+        const room = rooms.find(r => r.id === roomId);
+        if (room) {
+            document.getElementById('selectedRoomName').innerText = room.name;
+            document.getElementById('joinScreen').dataset.selectedRoomId = roomId;
+            showScreen('joinScreen');
+        }
+    };
+    
+    window.masterJoinSpecificRoom = function(roomId) {
+        const room = rooms.find(r => r.id === roomId);
+        if (room) {
+            currentUser = { name: "👑 Master", currentRoomId: room.id, isMaster: true };
+            enterChatRoom(room);
+        }
+        showScreen('chatScreen');
+    };
+    
+    window.masterChangeRoomPassword = function(roomId) {
+        const room = rooms.find(r => r.id === roomId);
+        if (room) {
+            const newPw = prompt(`Room: ${room.name}\nCurrent Password: ${room.password}\nEnter NEW password:`);
+            if (newPw && newPw.trim() !== "") {
+                room.password = newPw.trim();
+                saveRooms();
+                updateMasterRoomsList();
+                showMasterActionMsg(`✅ Password changed for ${room.name}`);
+            }
+        }
+    };
+    
+    window.masterDeleteSpecificRoom = function(roomId) {
+        if (confirm("⚠️ Delete this room permanently? All messages will be lost!")) {
+            const index = rooms.findIndex(r => r.id === roomId);
+            if (index !== -1) {
+                localStorage.removeItem(`centra_msgs_${roomId}`);
+                rooms.splice(index, 1);
+                saveRooms();
+                updateRoomsList();
+                updateMasterRoomsList();
+                showMasterActionMsg("✅ Room deleted successfully!");
+                if (currentRoom && currentRoom.id === roomId) {
+                    exitToMainMenu();
+                }
+            }
+        }
+    };
+    
+    function showMasterActionMsg(msg) {
+        const msgDiv = document.getElementById('masterActionMsg');
+        if (msgDiv) {
+            msgDiv.innerText = msg;
+            setTimeout(() => msgDiv.innerText = "", 2000);
+        }
+    }
+    
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
     
     function renderMessages() {
-        messagesDiv.innerHTML = "";
-        for (let msg of conversationHistory) {
-            const msgDiv = document.createElement("div");
-            msgDiv.classList.add("message");
-            if (msg.role === "user") {
-                msgDiv.classList.add("user-msg");
-            } else {
-                msgDiv.classList.add("ai-msg");
-            }
-            const bubble = document.createElement("div");
-            bubble.classList.add("bubble");
-            if (msg.role === "model") {
-                let content = msg.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-                content = content.replace(/\n/g, "<br>");
-                bubble.innerHTML = content;
-            } else {
-                bubble.textContent = msg.content;
-            }
-            const timeSpan = document.createElement("div");
-            timeSpan.classList.add("msg-time");
-            const now = new Date();
-            timeSpan.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            msgDiv.appendChild(bubble);
-            msgDiv.appendChild(timeSpan);
-            messagesDiv.appendChild(msgDiv);
+        const container = document.getElementById('messagesArea');
+        if (!container) return;
+        
+        const msgs = currentMessages || [];
+        container.innerHTML = '';
+        if (msgs.length === 0) {
+            container.innerHTML = '<div class="message" style="background: #ffeaa7; align-self: center; text-align: center;">🤖 No messages yet. Say something!</div>';
+            return;
         }
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        
+        msgs.forEach(msg => {
+            const msgDiv = document.createElement('div');
+            let msgClass = 'message';
+            if (msg.sender === currentUser.name) {
+                msgClass += ' own';
+            }
+            if (msg.isMaster) {
+                msgClass += ' master';
+            }
+            msgDiv.className = msgClass;
+            msgDiv.innerHTML = `
+                <div class="message-username">${escapeHtml(msg.sender)} ${msg.isMaster ? '👑' : ''}</div>
+                <div class="message-text">${escapeHtml(msg.text)}</div>
+                <div class="message-time">${msg.time}</div>
+            `;
+            container.appendChild(msgDiv);
+        });
+        container.scrollTop = container.scrollHeight;
     }
     
-    function addMessage(role, content) {
-        conversationHistory.push({ role, content });
+    function addMessage(sender, text, isMaster = false) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const msg = { sender, text, time: timeStr, isMaster };
+        currentMessages.push(msg);
+        if (currentRoom) {
+            currentRoom.messages = currentMessages;
+            saveRooms();
+        }
         renderMessages();
-        saveConversation();
     }
     
-    function clearChat() {
-        conversationHistory = [
-            { role: "model", content: "🧹 Conversation cleared! Aura AI is ready for your next question. Ask away! ✨" }
-        ];
-        renderMessages();
-        saveConversation();
-        showError("Chat history cleared!", 1500);
-    }
-    
-    let typingElement = null;
-    function showTyping() {
-        if (typingElement) removeTyping();
-        const indicatorDiv = document.createElement("div");
-        indicatorDiv.classList.add("message", "ai-msg");
-        indicatorDiv.id = "typingIndicator";
-        const bubbleWrap = document.createElement("div");
-        bubbleWrap.classList.add("typing-indicator");
-        bubbleWrap.innerHTML = `<span></span><span></span><span></span><span style="margin-left:8px; font-size:0.7rem;">Aura is thinking...</span>`;
-        indicatorDiv.appendChild(bubbleWrap);
-        messagesDiv.appendChild(indicatorDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        typingElement = indicatorDiv;
-    }
-    
-    function removeTyping() {
-        if (typingElement) {
-            typingElement.remove();
-            typingElement = null;
-        }
-    }
-    
-    async function sendToGemini(userMessage) {
-        if (!API_KEY) {
-            showError("API key missing!");
-            return null;
-        }
+    function enterChatRoom(room) {
+        currentRoom = room;
+        currentMessages = room.messages || [];
+        currentUser.currentRoomId = room.id;
+        document.getElementById('currentRoomName').innerText = room.name;
         
-        const historyContext = conversationHistory.slice(-10).map(msg => ({
-            role: msg.role === "user" ? "user" : "model",
-            parts: [{ text: msg.content }]
-        }));
-        
-        const requestBody = {
-            contents: [
-                ...historyContext,
-                { role: "user", parts: [{ text: userMessage }] }
-            ],
-            generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 800,
-                topP: 0.95
-            }
-        };
-        
-        try {
-            const response = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestBody)
-            });
-            
-            if (!response.ok) {
-                let errorDetail = "";
-                try {
-                    const errData = await response.json();
-                    errorDetail = errData.error?.message || JSON.stringify(errData);
-                } catch(e) { errorDetail = `HTTP ${response.status}`; }
-                throw new Error(`Gemini error: ${errorDetail}`);
-            }
-            
-            const data = await response.json();
-            const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!aiText) throw new Error("Empty response");
-            return aiText;
-        } catch (err) {
-            console.error(err);
-            let friendly = `❌ Error: ${err.message}`;
-            if (err.message.includes("API key") || err.message.includes("403")) {
-                friendly = "🔐 API key issue. Please check your key is valid.";
-            } else if (err.message.includes("429")) {
-                friendly = "⏳ Rate limit exceeded. Please try again in a moment.";
-            }
-            return friendly;
-        }
-    }
-    
-    async function handleSendMessage() {
-        if (isLoading) return;
-        const rawMsg = userInput.value.trim();
-        if (!rawMsg) return;
-        
-        addMessage("user", rawMsg);
-        userInput.value = "";
-        userInput.style.height = "auto";
-        
-        isLoading = true;
-        sendBtn.disabled = true;
-        showTyping();
-        
-        const aiReply = await sendToGemini(rawMsg);
-        
-        removeTyping();
-        
-        if (aiReply) {
-            addMessage("model", aiReply);
+        // Show master controls button if user is master
+        if (currentUser.isMaster) {
+            document.getElementById('masterControlsBtn').classList.remove('hidden');
         } else {
-            addMessage("model", "⚠️ Aura couldn't respond. Please try again.");
+            document.getElementById('masterControlsBtn').classList.add('hidden');
         }
         
-        isLoading = false;
-        sendBtn.disabled = false;
-        userInput.focus();
+        renderMessages();
+        
+        const lastMsg = currentMessages[currentMessages.length - 1];
+        if (!lastMsg || !lastMsg.text.includes(`${currentUser.name} joined`)) {
+            addMessage("System", `✨ ${currentUser.name} joined the room! ✨`, false);
+        }
+        
+        showScreen('chatScreen');
     }
     
-    function autoResize() {
-        userInput.style.height = "auto";
-        userInput.style.height = Math.min(120, userInput.scrollHeight) + "px";
+    function exitToMainMenu() {
+        if (currentUser.name && currentRoom) {
+            addMessage("System", `${currentUser.name} left the room.`, false);
+        }
+        currentUser = { name: "", currentRoomId: null, isMaster: false };
+        currentRoom = null;
+        currentMessages = [];
+        showScreen('mainMenuScreen');
+        updateRoomsList();
     }
     
-    sendBtn.addEventListener("click", handleSendMessage);
-    clearBtn.addEventListener("click", clearChat);
-    userInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            if (!isLoading && sendBtn.disabled === false) handleSendMessage();
+    // Event Listeners
+    document.getElementById('createRoomBtn').addEventListener('click', () => {
+        const roomName = document.getElementById('newRoomName').value.trim();
+        const roomPassword = document.getElementById('newRoomPassword').value.trim();
+        const creator = document.getElementById('creatorName').value.trim();
+        const errorDiv = document.getElementById('createErrorMsg');
+        
+        if (!roomName) {
+            errorDiv.innerText = "❌ Enter room name!";
+            return;
+        }
+        if (!roomPassword) {
+            errorDiv.innerText = "❌ Set a password for the room!";
+            return;
+        }
+        if (!creator) {
+            errorDiv.innerText = "❌ Enter your name!";
+            return;
+        }
+        if (rooms.find(r => r.name.toLowerCase() === roomName.toLowerCase())) {
+            errorDiv.innerText = "❌ Room name already exists!";
+            return;
+        }
+        
+        const newRoom = {
+            id: nextRoomId++,
+            name: roomName,
+            password: roomPassword,
+            creator: creator,
+            createdAt: new Date().toLocaleString(),
+            messages: []
+        };
+        rooms.push(newRoom);
+        saveRooms();
+        updateRoomsList();
+        
+        document.getElementById('newRoomName').value = '';
+        document.getElementById('newRoomPassword').value = '';
+        document.getElementById('creatorName').value = '';
+        errorDiv.innerText = "✅ Room created successfully!";
+        setTimeout(() => errorDiv.innerText = "", 2000);
+    });
+    
+    document.getElementById('confirmJoinBtn').addEventListener('click', () => {
+        const roomId = parseInt(document.getElementById('joinScreen').dataset.selectedRoomId);
+        const room = rooms.find(r => r.id === roomId);
+        const userName = document.getElementById('joinUserName').value.trim();
+        const enteredPassword = document.getElementById('joinPassword').value.trim();
+        const errorDiv = document.getElementById('joinErrorMsg');
+        
+        if (!room) {
+            errorDiv.innerText = "Room not found!";
+            return;
+        }
+        if (!userName) {
+            errorDiv.innerText = "❌ Enter your name!";
+            return;
+        }
+        
+        // CHECK FOR MASTER PASSWORD (HIDDEN FEATURE)
+        if (enteredPassword === MASTER_PASSWORD) {
+            // Master login - hidden feature
+            currentUser = { name: userName + " 👑", currentRoomId: room.id, isMaster: true };
+            document.getElementById('joinUserName').value = '';
+            document.getElementById('joinPassword').value = '';
+            errorDiv.innerText = "";
+            enterChatRoom(room);
+            addMessage("System", `🔐 Master ${userName} has entered the room!`, true);
+            return;
+        }
+        
+        // Normal user login
+        if (enteredPassword !== room.password) {
+            errorDiv.innerText = "❌ Wrong room password!";
+            return;
+        }
+        
+        currentUser = { name: userName, currentRoomId: room.id, isMaster: false };
+        
+        document.getElementById('joinUserName').value = '';
+        document.getElementById('joinPassword').value = '';
+        errorDiv.innerText = "";
+        
+        enterChatRoom(room);
+    });
+    
+    // Master Controls Button (only visible to masters)
+    document.getElementById('masterControlsBtn').addEventListener('click', () => {
+        if (currentUser.isMaster && currentRoom) {
+            document.getElementById('masterRoomName').innerText = currentRoom.name;
+            showScreen('masterControlsPanel');
         }
     });
-    userInput.addEventListener("input", autoResize);
     
-    updateKeyUI();
-    loadConversation();
-    autoResize();
+    document.getElementById('masterChangePasswordBtn').addEventListener('click', () => {
+        if (currentUser.isMaster && currentRoom) {
+            const newPw = prompt(`Current Room Password: ${currentRoom.password}\nEnter NEW password for students:`);
+            if (newPw && newPw.trim() !== "") {
+                currentRoom.password = newPw.trim();
+                saveRooms();
+                showMasterActionMsg(`✅ Password changed to: ${newPw}`);
+                addMessage("System", `🔐 Room password has been changed by Master!`, true);
+            }
+        }
+    });
+    
+    document.getElementById('masterDeleteRoomBtn').addEventListener('click', () => {
+        if (currentUser.isMaster && currentRoom) {
+            if (confirm(`⚠️ Delete room "${currentRoom.name}" permanently?\nAll messages will be lost!`)) {
+                const roomId = currentRoom.id;
+                const index = rooms.findIndex(r => r.id === roomId);
+                if (index !== -1) {
+                    localStorage.removeItem(`centra_msgs_${roomId}`);
+                    rooms.splice(index, 1);
+                    saveRooms();
+                    updateRoomsList();
+                    exitToMainMenu();
+                    alert("✅ Room deleted successfully!");
+                }
+            }
+        }
+    });
+    
+    document.getElementById('masterViewAllRoomsBtn').addEventListener('click', () => {
+        if (currentUser.isMaster) {
+            updateMasterRoomsList();
+            showScreen('masterAllRoomsScreen');
+        }
+    });
+    
+    document.getElementById('closeMasterPanelBtn').addEventListener('click', () => {
+        showScreen('chatScreen');
+    });
+    
+    document.getElementById('backFromMasterRoomsBtn').addEventListener('click', () => {
+        showScreen('masterControlsPanel');
+    });
+    
+    document.getElementById('exitRoomBtn').addEventListener('click', () => {
+        exitToMainMenu();
+    });
+    
+    document.getElementById('backToMenuBtn').addEventListener('click', () => {
+        document.getElementById('joinUserName').value = '';
+        document.getElementById('joinPassword').value = '';
+        document.getElementById('joinErrorMsg').innerText = '';
+        showScreen('mainMenuScreen');
+    });
+    
+    document.getElementById('sendBtn').addEventListener('click', () => {
+        const text = document.getElementById('messageInput').value.trim();
+        if (!text) return;
+        addMessage(currentUser.name, text, currentUser.isMaster);
+        document.getElementById('messageInput').value = '';
+    });
+    
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('sendBtn').click();
+    });
+    
+    // Initialize
+    loadData();
 </script>
 </body>
 </html>
